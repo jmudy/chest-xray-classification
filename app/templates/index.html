@@ -1,14 +1,71 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Subir Imagen</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chest X-ray Pneumonia Classification</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
-  <h1>Subir Imagen</h1>
-  <form method=post enctype=multipart/form-data action="{{ url_for('upload_file') }}">
-    <input type=file name=file>
-    <input type=submit value=Subir>
-  </form>
+    <div class="header-box">
+        <div class="github-link">
+            <a href="https://github.com/jmudy/chest-xray-classification" target="_blank">
+                <img src="https://static-00.iconduck.com/assets.00/github-icon-2048x1988-jzvzcf2t.png" alt="GitHub Logo">
+            </a>
+        </div>
+        <h1>Chest X-ray Pneumonia Classification</h1>
+    </div>
+    <div class="container">
+        <p>Welcome to our advanced Chest X-ray Analysis tool. Using state-of-the-art deep learning, we predict whether an uploaded chest X-ray indicates pneumonia or is normal.</p>
+        <p>Ready to get your prediction? Upload a chest X-ray image below.</p>
+
+        <div class="description">
+            <p>This tool utilizes a powerful deep learning model trained on a vast dataset of chest X-ray images. The model has been fine-tuned to provide accurate predictions for detecting pneumonia in X-ray scans.</p>
+            <p>Simply upload an image, and let our system analyze and reveal the insights it uncovers.</p>
+        </div>
+
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+
+        <form method="post" enctype="multipart/form-data">
+            <div class="drop-area" id="dropArea">
+                <span>Drag and drop your image here or click to browse</span>
+                <input type="file" name="file" accept=".png, .jpg, .jpeg" id="fileInput">
+            </div>
+            <input type="submit" value="Get Prediction">
+        </form>
+
+        {% if filename %}
+            <div class="result-container">
+                <h2>Uploaded Image: {{ filename }}</h2>
+                <img src="{{ url_for('static', filename='uploads/' + filename) }}" alt="Uploaded Image">
+                <h2>Prediction: {{ prediction }}</h2>
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        // Script para manejar la funcionalidad de arrastrar y soltar
+        const dropArea = document.getElementById('dropArea');
+        const fileInput = document.getElementById('fileInput');
+
+        dropArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropArea.classList.add('drop-area-hover');
+        });
+
+        dropArea.addEventListener('dragleave', () => {
+            dropArea.classList.remove('drop-area-hover');
+        });
+
+        dropArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropArea.classList.remove('drop-area-hover');
+            const file = e.dataTransfer.files[0];
+            fileInput.files = e.dataTransfer.files;
+            dropArea.querySelector('span').innerText = file.name;
+        });
+    </script>
 </body>
 </html>
