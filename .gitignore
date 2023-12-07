@@ -161,4 +161,5 @@ cython_debug/
 
 *.hdf5
 *.h5
-uploads/
+*.jpeg
+img_tests/
